@@ -21,20 +21,16 @@ if __name__ == "__main__":
 
     limits = {"red": 12, "green": 13, "blue": 14}
 
-    # part 1 -- check games for validity
-    sum_id = 0
-    for game_id, drafts in games.items():
-        valid = True
-        for draft in drafts:
-            valid &= all([ limits[k] >= draft.get(k, 0) for k in limits.keys() ])
-        sum_id += valid * game_id
-    print(sum_id)
-
-    # part 2 -- get lower bound on dice
     def prod(x):
         return reduce(lambda a,b: a * b, x)
     
     def lower_bounds(drafts):
         return reduce(lambda a,b: { i: max(a.get(i,0), b.get(i,0)) for i in a.keys() | b.keys() }, drafts)
 
+    bounds = { game: lower_bounds(drafts) for game, drafts in games.items() }
+
+    # part 1 -- check games for validity
+    print(sum([ g for g, b in bounds.items() if all([ limits[k] >= b.get(k,0) for k in limits ])]))
+
+    # part 2 -- get lower bound on dice
     print(sum(prod(lower_bounds(drafts).values()) for drafts in games.values()))

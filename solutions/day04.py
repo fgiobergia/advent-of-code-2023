@@ -1,6 +1,6 @@
 with open("day04.input") as f:
     cards = [ line.split(":")[1].strip().split("|") for line in f ]
-cards = [ (set(win.strip().split()), set(played.strip().split())) for win, played in cards ]
+cards = [ (set(win.split()), set(played.split())) for win, played in cards ]
 
 print(sum( (1 << len(w & p)) // 2 for w, p in cards ))
 
